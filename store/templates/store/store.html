@@ -1,0 +1,61 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<form class="d-flex" action="{%url 'search'%}" method="get">
+  <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="query">
+  <button class="btn btn-outline-success" type="submit">Search</button>
+</form>
+<hr>
+
+<div class="row">
+  <div class="col-lg-2" style="padding: 5px;">
+    <div class="box-element">
+      <strong>Category</strong>
+    </div>
+  </div>
+  {% for category in categorys %}
+    {% if category.screen == True %}
+      <div class="col-lg-2" style="padding: 5px;">
+        <div class="box-element">
+          <a class="dropdown-item" href="{%url 'category' category.id%}">{{category.name}}</a>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</div>
+<hr>
+
+<div class="slideshow-container hidden" style="width: auto; height: auto; background: rgba(0, 0, 0, 0.4);padding: 40px; text-align: center; margin: auto; margin-top: 5%; color: white; font-family: 'Century Gothic',sans-serif;">
+  {% for product in products %}
+    <div class="mySlides fade">
+      <a href="{%url 'product' product.id%}"><img src="{{product.image.url}}" style="border-radius: 50%; width: 200px; height: 200px;"></a>
+      <div style="font-size: 40px; letter-spacing: 3px; font-weight: 100;">{{product.name}}</div>
+    </div>
+  {% endfor %}
+</div>
+<br>
+<div style="text-align:center" class="hidden">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
+  <span class="dot" onclick="currentSlide(4)"></span>
+  <span class="dot" onclick="currentSlide(5)"></span>
+</div>
+
+<div class="row">
+  {% for product in products %}
+    {% if product.approved == True %}
+      <div class="col-lg-3" style="padding: 5px;">
+        <a href="{%url 'product' product.id%}"><img class="thumbnail" src="{{product.image.url}}"></a>
+        <div class="box-element product">
+          <h6><strong>{{product.name}}</strong></h6>
+          <hr>
+          <button data-product="{{product.id}}" data-action="add" class="glow-on-hover update-cart" type="button">Add to Cart</button>
+        </div>
+      </div>
+      <br>
+    {% endif %}
+  {% endfor %}
+</div>
+<hr>
+{% endblock content %}

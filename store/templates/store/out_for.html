@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ship Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <h2 style="color: white">Store Key</h2>
+        <ul style="list-style-type: none;">
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'ship_home'%}">Home</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'shipped'%}">Shipped</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'out_for'%}">Out for Delivery</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'delivery'%}">Delivered</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div style="padding: 2%">
+      <h2>Out for delivery</h2>
+      <div class="row">
+        {% for item in items %}
+          {% for ship in ships %}
+            {% if item.order.id == ship.order.id %}
+              {% if item.delivered == False %}
+                {% if item.out_for_delivery == True %}
+                  {% if item.shipped == True %}
+                    <div class="col-lg-3" style="padding: 5px;">
+                      <div class="box-element">
+                        <h6><strong><a href="{%url 'out_for_product' item.id%}">{{item.id}}-{{item.order.id}}-{{item.product}}({{item.quantity}})-{{ship.id}}</a></strong></h6>
+                        <hr>
+                        <h6>{{ship.name}} - {{ship.number}}</h6>
+                        <h6>{{ship.address}}, {{ship.city}}</h6>
+                        <h6>{{ship.state}} - {{ship.zipcode}}</h6>
+                        <hr>
+                        <h6>Quantity: {{item.quantity}}</h6>
+                        <h6>Price: ₹ {% widthratio item.quantity 1 item.product.price %}</h6>
+                      </div>
+                    </div>
+                    <br>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

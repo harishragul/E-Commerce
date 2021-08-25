@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title></title>
+    <style media="screen">
+      div{
+        background-color: white;
+        position:fixed;
+        top: 30%;
+        left: 30%;
+        width: 300px;
+        border: 15px solid gray;
+        padding: 50px;
+        margin: 20px;
+      }
+      @media screen and (max-width: 600px) {
+        div{
+          background-color: white;
+          width: auto;
+          border: 15px solid gray;
+          margin-left: 1%;
+        }
+
+      }
+    </style>
+  </head>
+  <body style="background-color: black">
+    <div class="main">
+        <form method="POST">
+            {% csrf_token %}
+            Are you want to delete this item ?
+            <hr>
+            <input type="submit" value="Yes" />
+            <hr>
+            <a href="{%url 'require'%}">Cancel </a>
+        </form>
+    </div>
+  </body>
+</html>

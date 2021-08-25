@@ -1,0 +1,53 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+	<div><h2><strong>Shipment Details</strong></h2></div>
+	<div class="row">
+		<div class="col-lg-4" style="padding: 5px;">
+			<div class="box-element">
+				<img src="{{product.product.image.url}}" class="thumbnail">
+				<h4><strong>{{product.product.name}}</strong></h4>
+				<h6>Qty: {{product.quantity}}</h6>
+				<h6>Sold by: {{product.product.shop.name}}</h6>
+			</div>
+		</div>
+		<br>
+		<div class="col-lg-4" style="padding: 5px;">
+			<div class="box-element">
+				{% for ship in ships %}
+    				{% if product.order.id == ship.order.id %}
+    					<h3><strong>Order Details</strong></h3>
+    					<h6>Order Date: {{product.date_added}}</h6>
+    					<h6>Order ID: {{product.id}}-{{product.order.id}}-{{product.product.id}}-{{product.quantity}}-{{ship.id}}</h6>
+    					<h6>Order Total: ₹ {% widthratio product.quantity 1 product.product.price %}</h6>
+    					<hr>
+    					<h3><strong>Shipping Address</strong></h3>
+    					<h4>{{ship.name}}</h4>
+    					<h6>{{ship.number}}</h6>
+    					<h6>{{ship.address}}</h6>
+    					<h6>{{ship.city}}</h6>
+    					<h6>{{ship.state}}</h6>
+    					<h6>{{ship.zipcode}}</h6>
+            		{% endif %}
+          		{% endfor %}
+			</div>
+		</div>
+		<br>
+		<div class="col-lg-4" style="padding: 5px;">
+			<div class="box-element">
+    			<h3><strong>Seller Details</strong></h3>
+    			<h6>{{product.product.shop.name}}</h6>
+    			<h6>{{product.product.shop.number}}</h6>
+    			<h6>{{product.product.shop.address}}</h6>
+    			<h6>{{product.product.shop.city}}</h6>
+    			<h6>{{product.product.shop.state}}</h6>
+    			<h6>{{product.product.shop.zipcode}}</h6>
+			</div>
+		</div>
+
+		<div style="padding-bottom: 5%; padding-right: 5%; padding-top: 5%;">
+			<a style="float:right;" class="button3 btn-success" href="{% url 'store' %}">Go to Shop</a>
+		</div>
+
+	</div>
+{% endblock content %}

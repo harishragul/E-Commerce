@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Ship Home</title>
+    <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+      <div class="container-fluid">
+        <h2 style="color: white">Store Key</h2>
+        <ul style="list-style-type: none;">
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'ship_home'%}">Home</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'shipped'%}">Shipped</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'out_for'%}">Out for Delivery</a></li>
+          <li style="display: inline-block; margin: 10px"><a style="color: white; text-decoration: none;" href="{%url 'delivery'%}">Delivered</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div style="padding: 2%">
+      <div class="row">
+        <div class="col-lg-4" style="padding: 5px;">
+    			<div class="box-element">
+    				<img src="{{item.product.image.url}}" class="thumbnail">
+    				<h4><strong>{{item.product.name}}</strong></h4>
+    				<h6>Qty: {{item.quantity}}</h6>
+    				<h6>Sold by: {{item.product.shop.name}}</h6>
+    			</div>
+    		</div>
+    		<br>
+
+    		<div class="col-lg-4" style="padding: 5px;">
+    			<div class="box-element">
+    				{% for ship in ships %}
+        				{% if item.order.id == ship.order.id %}
+        					<h3><strong>Order Details</strong></h3>
+        					<h6>Order Date: {{item.date_added}}</h6>
+        					<h6>Order ID: {{item.id}}-{{item.order.id}}-{{item.product.id}}-{{item.quantity}}-{{ship.id}}</h6>
+        					<h6>Order Total: ₹ {% widthratio item.quantity 1 item.product.price %}</h6>
+        					<hr>
+        					<h3><strong>Shipping Address</strong></h3>
+        					<h4>{{ship.name}}</h4>
+        					<h6>{{ship.number}}</h6>
+        					<h6>{{ship.address}}</h6>
+        					<h6>{{ship.city}}</h6>
+        					<h6>{{ship.state}}</h6>
+        					<h6>{{ship.zipcode}}</h6>
+                {% endif %}
+            {% endfor %}
+    			</div>
+    		</div>
+    		<br>
+    		<div class="col-lg-4" style="padding: 5px;">
+    			<div class="box-element">
+        			<h3><strong>Seller Details</strong></h3>
+        			<h6>{{item.product.shop.name}}</h6>
+        			<h6>{{item.product.shop.number}}</h6>
+        			<h6>{{item.product.shop.address}}</h6>
+        			<h6>{{item.product.shop.city}}</h6>
+        			<h6>{{item.product.shop.state}}</h6>
+        			<h6>{{item.product.shop.zipcode}}</h6>
+              <hr>
+    			</div>
+    		</div>
+        <br>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,177 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+  <div class="row" style="margin-bottom: 4%">
+    <div class="col-lg-6">
+      <div class="box-element">
+        <a class="btn btn-outline-dark" href="{% url 'cart' %}"><b>Back to Cart</b></a>
+        <hr>
+        <h3>Order Summary</h3>
+        <hr>
+        {% for item in items %}
+        <div class="cart-row">
+          <div style="flex:2"><img class="row-image" src="{{item.product.image.url}}"></div>
+          <div style="flex:2"><p>{{item.product.name}}</p></div>
+          <div style="flex:1"><p>{{item.product.price|floatformat:0}}</p></div>
+          <div style="flex:1">x{{item.quantity}}</div>
+        </div>
+        {% endfor %}
+        <h5>Items: {{order.get_cart_items}}</h5>
+        <h5>Total: ₹{{order.get_cart_total|floatformat:0}}</h5>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="box-element" id="form-wrapper">
+        <form id="form">
+          <div id="user-info">
+            <h3>User info</h3>
+            <div class="form-field">
+              <input required class="form-control" type="text" name="name" placeholder="Name">
+            </div>
+            <div class="form-field">
+              <input required class="form-control no-arrow" type="number" name="number" placeholder="Number">
+            </div>
+          </div>
+          <hr>
+          <div id="shipping-info">
+            <h3>Shipping info</h3>
+            <div class="form-field">
+              <input required class="form-control" type="text" name="address" placeholder="Address">
+            </div>
+            <div class="form-field">
+              <input required class="form-control" type="text" name="city" placeholder="City">
+            </div>
+            <div class="form-field">
+              <input required class="form-control" type="text" name="state" placeholder="State">
+              <!-- <select id="states" name="states">
+                <option>Andhra Pradesh</option>
+                <option>Arunachal Pradesh</option>
+                <option>Assam</option>
+                <option>Bihar</option>
+                <option>Chhattisgarh</option>
+                <option>Goa</option>
+                <option>Gujarat</option>
+                <option>Haryana</option>
+                <option>Himachal Pradesh</option>
+                <option>Jammu and Kashmir</option>
+                <option>Jharkhand</option>
+                <option>Karnataka</option>
+                <option>Kerala</option>
+                <option>Madhya Pradesh</option>
+                <option>Maharashtra</option>
+                <option>Manipur</option>
+                <option>Meghalaya</option>
+                <option>Mizoram</option>
+                <option>Nagaland</option>
+                <option>Odisha</option>
+                <option>Punjab</option>
+                <option>Rajasthan</option>
+                <option>Sikkim</option>
+                <option>Tamil Nadu</option>
+                <option>Telangana</option>
+                <option>Tripura</option>
+                <option>Uttar Pradesh</option>
+                <option>Uttarakhand</option>
+                <option>West Bengal</option>
+              </select> -->
+            </div>
+            <div class="form-field">
+              <input required class="form-control no-arrow" type="number" name="zipcode" placeholder="PIN">
+            </div>
+          </div>
+          <hr>
+          <div class="rapper">
+            <div class="link_rapper">
+              <input id="form-button" class="c" type="submit" value="Continue">
+              <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 268.832 268.832">
+                  <path d="M265.17 125.577l-80-80c-4.88-4.88-12.796-4.88-17.677 0-4.882 4.882-4.882 12.796 0 17.678l58.66 58.66H12.5c-6.903 0-12.5 5.598-12.5 12.5 0 6.903 5.597 12.5 12.5 12.5h213.654l-58.66 58.662c-4.88 4.882-4.88 12.796 0 17.678 2.44 2.44 5.64 3.66 8.84 3.66s6.398-1.22 8.84-3.66l79.997-80c4.883-4.882 4.883-12.796 0-17.678z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <br>
+      <div class="hidden" id="payment-info">
+        <h4>Place Order</h4>
+        <hr>
+        <form>
+          <br>
+          <br>
+          <div class="wrap">
+            <button class="button" id="make-payment">Confirm Order</button>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total|floatformat:2}}'
+
+    if (shipping == 'False') {
+      document.getElementById('shipping-info').innerHTML = '';
+    }
+
+    var form = document.getElementById('form')
+    form.addEventListener('submit', function(e){
+      e.preventDefault()
+      console.log('Form Submited')
+      document.getElementById('form-button').classList.add("hidden");
+      document.getElementById('payment-info').classList.remove("hidden");
+    })
+
+    function submitFormData(){
+      console.log('Payment button clicked')
+
+      var userFormData = {
+        'name': null,
+        'number': null,
+        'total': total,
+      }
+
+      var shippingInfo = {
+        'address': null,
+        'city': null,
+        'state': null,
+        'zipcode': null
+      }
+
+      if (shipping != 'False') {
+        userFormData.name = form.name.value
+        userFormData.number = form.number.value
+        shippingInfo.address = form.address.value
+        shippingInfo.city = form.city.value
+        shippingInfo.state = form.state.value
+        shippingInfo.zipcode = form.zipcode.value
+      }
+
+      var url = "/process_order/"
+      fetch(url, {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'X-CSRFToken':csrftoken,
+        },
+        body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo}),
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        window.location.href = "{% url 'profile' %}"
+      })
+    }
+
+    document.getElementById('make-payment').addEventListener('click', function(e){
+      submitFormData()
+    })
+
+  </script>
+{% endblock content %}

@@ -1,0 +1,48 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+  <h3>{{product.name}}</h3>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="box-element">
+        <img class="thumbnail" src="{{product.image.url}}">
+        <div class="box-element product";>
+          <h6><strong>{{product.name}}</strong></h6>
+          <hr>
+          <button data-product="{{product.id}}" data-action="add" class="glow-on-hover update-cart" type="button">Add to Cart</button>
+        </div>
+      </div>
+      <br>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="box-element">
+        <div>
+          <h5>Description</h5>
+          <p>{{product.description}}</p>
+          <hr>
+          <h5>Shop Info</h5>
+          <small>{{product.shop}},</small>
+          <small>{{product.shop.address}},</small>
+          <small>{{product.shop.city}},</small>
+          <small>{{product.shop.state}}</small>
+          <small>{{product.shop.zipcode}}</small>
+          <hr>
+          <strong>Category:</strong>
+          <small>{{product.category}}</small>
+          <br>
+          <strong>Price:</strong>
+          <small>₹ {{product.price}}</small>
+          <hr>
+
+          <div class="flex">
+            <a class="btn" href="{%url 'checkout'%}"><b>Checkout</b></a>
+            <a class="btn" href="{%url 'cart'%}"><b>Go to cart</b></a>
+          </div>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

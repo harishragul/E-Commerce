@@ -1,0 +1,17 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row">
+  {% for shop in shops %}
+  <div class="col-lg-4" style="padding: 5px;">
+    <div class="box-element">
+      <a href="{%url 'entity' shop.id%}"><h5>{{shop.name}}</h5></a>
+      <small>{{shop.address}},</small>
+      <small>{{shop.city}},</small>
+      <small>{{shop.state}}</small>
+      <small>{{shop.zipcode}}</small>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock content %}

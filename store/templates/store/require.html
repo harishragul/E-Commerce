@@ -1,0 +1,68 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+	<div class="row" style="margin-bottom: 4%">
+		<h1>Your Requirements</h1>
+		<div class="col-lg-8">
+			<div class="box-element">
+				<div class="cart-row">
+          			<div style="flex:2;"><strong>Product</strong></div>
+          			<div style="flex:2;"><strong>Category</strong></div>
+          			<div style="flex:2;"><strong>Description</strong></div>
+          			<div style="flex:2;"><strong>Delete</strong></div>
+        		</div>
+        		{% for require in requires %}
+        			{% if require.customer == customer %}
+        				<div class="cart-row">
+        					<div style="flex:2;">{{require.product}}</div>
+        					<div style="flex:2;">{{require.category}}</div>
+        					<div style="flex:2;">{{require.description}}</div>
+        					<div style="flex:2;"><a href="{%url 'require_delete' require.id%}">&#x2716</a></div>
+        				</div>
+        			{% endif %}
+        		{% endfor %}
+			</div>
+		</div>
+
+		<div class="col-lg-4">
+			<div class="box-element" style="text-align: center;">
+				<form method="POST" class="form-field">
+					{% csrf_token %}
+					<div class="hidden">
+						<h5>{{form.customer.label}}</h5>
+						{{form.customer}}
+					</div>
+					<hr>
+					<div>
+						<h5>{{form.product.label}}</h5>
+						{{form.product}}
+					</div>
+					<hr>
+					<div>
+						<h5>{{form.category.label}}</h5>
+						{{form.category}}
+					</div>
+					<hr>
+					<div>
+						<h5>{{form.image.label}}</h5>
+						{{form.image}}
+					</div>
+					<hr>
+					<div>
+						<h5>{{form.description.label}}</h5>
+						{{form.description}}
+					</div>
+					<hr>
+					<div>
+						<button class="glow-on-hover" type="submit">
+							Post
+						</button>
+					</div>
+					<hr>
+					<div><a class="btn btn-outline-dark" href="{% url 'store' %}"><b>Back to shop</b></a></div>
+					<hr>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

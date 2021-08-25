@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="{% static '/css/main.css' %}">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <style>
+    h3{
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="w3-sidebar w3-bar-block w3-border-right w3-blue" style="display:display; width: 15%;" id="mySidebar">
+    <a href="{%url 'dealer_product'%}" class="w3-bar-item w3-button">Product</a>
+    <hr>
+    <a href="{%url 'dealer_logout'%}" class="w3-bar-item w3-button">Logout</a>
+    <hr>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div style="margin-left: 15%;" class="container-fluid">
+        <h4 style="color: white; text-align: center;">Storekey Shop Dashboard - {{customer}}</h4>
+      </div>
+    </nav>
+  <div style="margin-left: 16%; padding-top: 1%; padding-right: 1%;">
+    <h1>Dashboard</h1>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="box-element" style="text-align: center; background: lightgray;">
+          <h3>Orders</h3>
+          <hr>
+          {% for item in items %}
+            {% if item.product.shop.id == customer.id %}
+              {% for ship in ships %}
+                {% if item.order.id == ship.order.id %}
+                  {% if item.packed == False %}
+                    <a href="{%url 'order_placed' item.id%}"><strong>{{item.id}}-{{item.order.id}}-{{item.product}}({{item.quantity}})-{{ship.id}}</strong></a>
+                    <hr>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="box-element" style="text-align: center; background: lightgray;">
+          <h3>Packed</h3>
+          <hr>
+          {% for item in items %}
+            {% if item.product.shop.id == customer.id %}
+              {% for ship in ships %}
+                {% if item.order.id == ship.order.id %}
+                  {% if item.packed == True %}
+                    {% if item.shipped == False %}
+                      <a href="{%url 'order_placed' item.id%}"><strong>{{item.id}}-{{item.order.id}}-{{item.product}}({{item.quantity}})-{{ship.id}}</strong></a>
+                      <hr>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <div class="box-element" style="text-align: center; background: lightgray;">
+          <h3>Shipped</h3>
+          <hr>
+          {% for item in items %}
+            {% if item.product.shop.id == customer.id %}
+              {% for ship in ships %}
+                {% if item.order.id == ship.order.id %}
+                  {% if item.packed == True %}
+                    {% if item.shipped == True %}
+                      <a href="{%url 'order_placed' item.id%}"><strong>{{item.id}}-{{item.order.id}}-{{item.product}}({{item.quantity}})-{{ship.id}}</strong></a>
+                      <hr>
+                    {% endif %}
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

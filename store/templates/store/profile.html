@@ -1,0 +1,72 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<div class="row" style="margin-bottom: 5%;">
+    <div class="col-lg-4">
+      <div class="box-element">
+      	<h3>User Info</h3>
+      	<hr>
+      	<h5>Username</h5>
+      	<small>{{customer.user}}</small>
+        <hr>
+      	<h5>Full Name</h5>
+      	<small>{{customer.name}}</small>
+        <hr>
+      	<h5>Number</h5>
+      	<small>{{customer.number}}</small>
+        <hr>
+      	<h5>Address</h5>
+      	<small>{{customer.address}}</small>
+      	<small>{{customer.city}}</small>
+      	<small>{{customer.state}}</small>
+      	<small>{{customer.zipcode}}</small>
+      	<hr>
+      	<a href="{%url 'info'%}" class="btn"><b>Update Info</b></a>
+        <a href="{%url 'logout'%}" class="btn"><b>Logout</b></a>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="box-element">
+        <div class="cart-row">
+          <div style="flex:1;"><strong>ID</strong></div>
+          <div style="flex:2;"><strong>Item</strong></div>
+          <div style="flex:2;"><strong>Price</strong></div>
+          <div style="flex:1;"><strong>Status</strong></div>
+        </div>
+      {% for thing in things %}
+        {% if customer.id == thing.order.customer.id %}
+          <div class="cart-row">
+            <div style="flex:1;">{{thing.id}}</div>
+            <div style="flex:2;"><a href="{%url 'order_detail' thing.id%}">{{thing.product.name}}</a></div>
+            <div style="flex:2;">₹ {% widthratio thing.quantity 1 thing.product.price %}</div>
+            {% if thing.packed == True %}
+              {% for ship in ships %}
+                {% if thing.order.id == ship.order.id %}
+                  {% if thing.shipped == True %}
+                    {% if thing.out_for_delivery == True %}
+                      {% if thing.delivered == True %}
+                        <div style="flex:1;">Delivered</div>
+                      {% else %}
+                        <div style="flex:1;">Out for delivery</div>
+                      {% endif %}
+                    {% else %}
+                      <div style="flex:1;">Shipped</div>
+                    {% endif %}
+                  {% else %}
+                    <div style="flex:1;">Packed</div>
+                  {% endif %}
+                {% endif %}
+              {% endfor %}
+            {% else %}
+              <div style="flex:1;">Ordered</div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
